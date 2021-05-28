@@ -21,18 +21,20 @@ def profile(msg="Elapsed time for function"):
     return internal
 
 
-def cache(max_limit=None):
+# Homework 1. Cache function (update)
+def cache(max_limit=float("inf")):
     def limit(f):
         @wraps(f)
         def deco(*args, **kwargs):
-            if args in deco._cache:
-                return deco._cache[args]
+            key = args + tuple(sorted(kwargs.items()))
+            if key in deco._cache:
+                return deco._cache[key]
 
             if len(deco._cache) == max_limit:
                 deco._cache.pop(next(iter(deco._cache)))
 
             result = f(*args, **kwargs)
-            deco._cache[args] = result
+            deco._cache[key] = result
             return result
 
         deco._cache = {}

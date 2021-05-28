@@ -92,19 +92,19 @@ def avr_data():
     return "Average height = {}, average weight = {}".format(round(height_avr, 5), round(weight_avr, 5))
 
 
-# Homework 2. Reading requirements.txt file function
+# Homework 2. Reading requirements.txt file function (update)
 @app.route("/requirements")
 def requirements():
-    with open("D:/Python/PycharmProjects/python_hillel_advanced/requirements.txt", "r") as txt_file:
+    with open("../requirements.txt", "r") as txt_file:
         file_content = txt_file.read()
     return file_content
 
 
-# Homework 2. Reading random_students file function
+# Homework 2. Reading random_students file function (update)
 @app.route("/random_students")
 def random_students():
     fake_students = Faker(["uk_UA"])
-    return "".join(fake_students.name() + ". " for _ in range(10))
+    return ". ".join(fake_students.name() for _ in range(10))
 
 
 app.run(debug=True, port=5001)
