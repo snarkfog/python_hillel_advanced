@@ -156,4 +156,37 @@ def get_sales():
     return "Sales amount: {}".format(round(sales, 2))
 
 
+# Homework 5. Genres Duration SQL Function
+@app.route("/genres_durations")
+def get_genre_durations():
+    query = f"SELECT genres.Name, sum(tracks.Milliseconds) / 1000 as Duration " \
+            f"FROM genres JOIN tracks on genres.GenreId = tracks.GenreId " \
+            f"GROUP by genres.Name"
+    records = execute_query(query)
+    return format_records(records)
+
+
+# Homework 5. Greatest Hits Counter SQL Function
+@app.route("/greatest_hits")
+@use_kwargs({
+    "count": fields.Int(
+        required=False
+    )
+},
+    location="query"
+)
+def get_greatest_hits(count=None):
+    query = f"SELECT tracks.Name, invoice_items.UnitPrice, invoice_items.Quantity " \
+            f"FROM tracks " \
+            f"JOIN invoice_items " \
+            f"on tracks.TrackId = invoice_items.TrackId " \
+            f"ORDER by invoice_items.UnitPrice DESC"
+    if count:
+        limit = f"LIMIT '{count}'"
+        query = query + " " + limit
+
+    records = execute_query(query)
+    return format_records(records)
+
+
 app.run(debug=True, port=5001)
