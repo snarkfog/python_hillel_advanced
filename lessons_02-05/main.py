@@ -176,11 +176,12 @@ def get_genre_durations():
     location="query"
 )
 def get_greatest_hits(count=None):
-    query = f"SELECT tracks.Name, invoice_items.UnitPrice, invoice_items.Quantity " \
+    query = f"SELECT tracks.Name, sum(invoice_items.UnitPrice * invoice_items.Quantity) as total, count(*) " \
             f"FROM tracks " \
             f"JOIN invoice_items " \
             f"on tracks.TrackId = invoice_items.TrackId " \
-            f"ORDER by invoice_items.UnitPrice DESC"
+            f"GROUP by tracks.Name " \
+            f"ORDER by total DESC"
     if count:
         limit = f"LIMIT '{count}'"
         query = query + " " + limit
